@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, Image, ImageBackground, TouchableHighlight } from 'react-native';
 
 import Voice from 'react-native-voice';
 
@@ -29,7 +29,7 @@ class Clock extends Component{
 
   render(){
     return(
-      <Text style={{fontSize: 20}}> Status : {this.state.status == true ? new Date().toLocaleTimeString() + "True" : "False"}</Text>
+      <Text style={{fontSize: 20}}>{this.state.status == true ? new Date().toLocaleTimeString() + "" : ""}</Text>
     );
   }
 }
@@ -171,62 +171,69 @@ class App extends Component {
       end: '',
     });
   };
-
+//<Image style={{width: '100%', height: '100%', resizeMode: 'stretch'}} source={require('./jooj.png')}/>
   render() {
     return (
-      <View style={styles.container} >
-        <LinearGradient colors={['#CB3BEB','#268BFF']} style={styles.linearGradient}>
-          <Text style={styles.buttonText}>
-            Sign in with Facebook
-          </Text>
-          <Text style={styles.welcome}>Welcome to React Native Voice!</Text>
-          <Text style={styles.instructions}>Press the button and start speaking.</Text>
-          <Text style={styles.stat}>{`Started: ${this.state.started}`}</Text>
-          <Text style={styles.stat}>{`Recognized: ${this.state.recognized}`}</Text>
-          <Text style={styles.stat}>{`Pitch: ${this.state.pitch}`}</Text>
-          <Text style={styles.stat}>{`Error: ${this.state.error}`}</Text>
-          <Text style={styles.stat}>Results</Text>
+      <ImageBackground style={{width: null, height: null, flex: 1}} source={require('./jooj.png')}>
+          <Text style={styles.instructions}>Aperte o botão para começar a gravar.</Text>
+          <TouchableHighlight onPress={this._destroyRecognizer}>
+            <Text style={styles.apagar}>Apagar</Text>
+          </TouchableHighlight>
+          <Text style={styles.resultado}>Resultado</Text>
           {this.state.results.map((result, index) => {
             return (
-              <Text key={`result-${index}`} style={styles.stat}>
+              <Text style={styles.resultado2} key={`result-${index}`} style={styles.stat}>
                 {result}
               </Text>
             );
           })}
-          <Text style={styles.stat}>Partial Results</Text>
-          {this.state.partialResults.map((result, index) => {
-            return (
-              <Text key={`partial-result-${index}`} style={styles.stat}>
-                {result}
-              </Text>
-            );
-          })}
-          <Text style={styles.stat}>{`End: ${this.state.end}`}</Text>
-          <TouchableHighlight onPress={this._startRecognizing}>
-            <Image style={styles.button} source={require('./button.png')} />
-          </TouchableHighlight>
-          <TouchableHighlight onPress={this._stopRecognizing}>
-            <Text style={styles.action}>Stop Recognizing</Text>
-          </TouchableHighlight>
-          <TouchableHighlight onPress={this._cancelRecognizing}>
-            <Text style={styles.action}>Cancel</Text>
-          </TouchableHighlight>
-          <TouchableHighlight onPress={this._destroyRecognizer}>
-            <Text style={styles.action}>Destroy</Text>
-          </TouchableHighlight>
+          <View style={styles.jooj}>
+            <TouchableHighlight onPress={this._cancelRecognizing}>
+              <Text style={styles.action}>Cancelar</Text>
+            </TouchableHighlight>
+            <TouchableHighlight onPress={this._startRecognizing}>
+              <Image style={styles.button} source={require('./button.png')} />
+            </TouchableHighlight>
+            <TouchableHighlight onPress={this._stopRecognizing}>
+              <Text style={styles.action}>Parar</Text>
+            </TouchableHighlight>
+          </View>
           <Clock/>
-        </LinearGradient>
-      </View>
+      </ImageBackground>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  button: {
-    width: 50,
-    height: 50,
-    alignSelf: "center",
+  jooj: {
+    position: "absolute",
+    marginTop: 710,
+    marginLeft: 0,
+    marginBottom: 200,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+  resultado: {
+    padding: 30,
+    marginTop: 35,
+  },
+  resultado2: {
+    height: 200,
+    padding: 30,
     marginTop: 10,
+  },
+  button: {
+    width: 80,
+    height: 80,
+    alignSelf: "center",
+    flexDirection: "row",
+    justifyContent: "flex-end", 
+    marginTop: 5,
+  },
+  apagar: {
+    marginLeft: 350,
+    color: "white",
   },
   container: {
     flex: 1,
@@ -236,24 +243,26 @@ const styles = StyleSheet.create({
   },
   welcome: {
     fontSize: 20,
+    color: "white",
     textAlign: 'center',
     margin: 10,
   },
   action: {
     textAlign: 'center',
     color: 'white',
-    marginVertical: 5,
     fontWeight: 'bold',
-    marginTop: 10,
+    marginTop: 20,
+    paddingRight: 55,
+    paddingLeft: 55
   },
   instructions: {
     textAlign: 'center',
     color: 'white',
-    marginBottom: 5,
+    marginTop: 8,
   },
   stat: {
     textAlign: 'center',
-    color: 'white',
+    color: 'black',
     marginBottom: 1,
     marginTop: 10,
   },
